@@ -1,4 +1,4 @@
-'''
+```
 ## WA Auto-Reply dengan AI Lokal
 
 Proyek ini memungkinkan kamu membuat bot WhatsApp yang dapat membalas pesan secara otomatis menggunakan AI lokal berbasis model GPT-2 atau GPT-2 fine-tuned untuk bahasa Indonesia.
@@ -47,4 +47,4 @@ wa-auto-reply/
 ├─ requirements.txt  # Daftar package yang dibutuhkan
 ├─ README.md         # Dokumentasi ini
 
-'''
+```
