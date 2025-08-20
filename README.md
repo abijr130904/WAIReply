@@ -1,7 +1,8 @@
+```
 ## WA Auto-Reply dengan AI Lokal
 
-Proyek ini memungkinkan kamu membuat bot WhatsApp yang dapat membalas pesan secara otomatis menggunakan AI lokal berbasis model GPT-2 atau GPT-2 fine-tuned untuk bahasa Indonesia.
-
+Proyek ini memungkinkan kamu membuat membalas pesan WA secara otomatis
+menggunakan berbasis AI 
 ## 🚀 Fitur
 
 Balas pesan WhatsApp otomatis.
@@ -45,3 +46,5 @@ wa-auto-reply/
 ├─ ai_module.py      # Modul untuk memanggil AI Lokal
 ├─ requirements.txt  # Daftar package yang dibutuhkan
 ├─ README.md         # Dokumentasi ini
+
+```
