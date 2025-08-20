@@ -2,7 +2,7 @@ import requests
 import time
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL_NAME = "llama3.1"
+MODEL_NAME = "llama3.2:1b-instruct-q4_K_M"
 
 def ai_response(text: str, retries: int = 3) -> str:
     """
