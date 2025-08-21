@@ -1,12 +1,18 @@
 from playwright.sync_api import sync_playwright
-import requests, json, time, re
+import requests, json, time, re, sys
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 MODEL_NAME = "llama3.2:1b-instruct-q4_K_M"
 
+# Warna terminal
+WHITE = "\033[97m"
+GREEN = "\033[92m"
+RESET = "\033[0m"
+
 def ai_response_stream_to_whatsapp(prompt, page):
     """
-    Ambil response AI streaming lalu kirim ke WhatsApp per kalimat.
+    Ambil response AI streaming lalu kirim ke WhatsApp per kalimat,
+    sambil stream ke terminal (hijau).
     """
     payload = {
         "model": MODEL_NAME,
@@ -19,11 +25,17 @@ def ai_response_stream_to_whatsapp(prompt, page):
             r.raise_for_status()
 
             buffer = ""
+            print(f"{GREEN}Balasan AI: ", end="", flush=True)  # mulai baris baru
+
             for line in r.iter_lines():
                 if line:
                     data = json.loads(line.decode("utf-8"))
                     token = data.get("response", "")
                     if token:
+                        # tampilkan langsung di terminal
+                        sys.stdout.write(token)
+                        sys.stdout.flush()
+
                         buffer += token
 
                         # cek jika ada kalimat lengkap
@@ -31,13 +43,17 @@ def ai_response_stream_to_whatsapp(prompt, page):
                         if len(sentences) > 1:
                             kalimat = "".join(sentences[:-1]).strip()
                             end = sentences[-2] if len(sentences) >= 2 else ""
-                            if kalimat:send_to_whatsapp(kalimat + end, page)
-                            buffer = sentences[-1]  # sisa yang belum lengkap
+                            if kalimat:
+                                send_to_whatsapp(kalimat + end, page)
+                            buffer = sentences[-1]  # sisa
 
                     if data.get("done", False):
-                        # kirim sisa terakhir kalau masih ada
-                        if buffer.strip():send_to_whatsapp(buffer.strip(), page)
+                        # kirim sisa terakhir
+                        if buffer.strip():
+                            send_to_whatsapp(buffer.strip(), page)
                         break
+
+            print(RESET)  # reset warna setelah selesai
     except Exception as e:
         print("Error streaming:", e)
         send_to_whatsapp("Error AI Lokal: tidak bisa balas.", page)
@@ -48,7 +64,7 @@ def send_to_whatsapp(text, page):
     input_box.click()
     input_box.fill(text.strip())
     input_box.press("Enter")
-    print("Terkirim:", text.strip())
+    print(f"\n{GREEN}✅ Terkirim: {text.strip()}{RESET}")
 
 def main():
     with sync_playwright() as p:
@@ -78,7 +94,7 @@ def main():
                     last_msg = messages[-1].inner_text()
 
                     if last_msg != last_seen_msg:
-                        print("\nPesan masuk:", last_msg)
+                        print(f"\n{WHITE}Pesan masuk: {last_msg}{RESET}")
 
                         # Balas dengan streaming per kalimat
                         ai_response_stream_to_whatsapp(last_msg, page)
