@@ -12,7 +12,7 @@ def ai_response_stream(text: str):
     payload = {
         "model": MODEL_NAME,
         "prompt": text,
-        "stream": True   # aktifkan streaming
+        "stream": True
     }
 
     try:
